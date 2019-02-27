@@ -1,15 +1,29 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Innofactor.EfCoreJsonValueConverter {
 
-  internal static class JsonHelper {
+  /// <summary>
+  /// Container for JSON settings used for value conversion.
+  /// </summary>
+  public static class JsonHelper {
 
-    public static T Deserialize<T>(string json) where T : class {
-      return string.IsNullOrWhiteSpace(json) ? null : JsonConvert.DeserializeObject<T>(json);
+    /// <summary>
+    /// Specifies the <see cref="JsonSerializerSettings" /> used for value conversion.
+    /// </summary>
+    public static JsonSerializerSettings SerializerSettings { get; } = new JsonSerializerSettings();
+
+    internal static object Deserialize(string json, Type type)
+    {
+      return string.IsNullOrWhiteSpace(json) ? null : JsonConvert.DeserializeObject(json, type, SerializerSettings);
     }
 
-    public static string Serialize<T>(T obj) where T : class {
-      return obj == null ? null : JsonConvert.SerializeObject(obj);
+    internal static T Deserialize<T>(string json) where T : class {
+      return string.IsNullOrWhiteSpace(json) ? null : JsonConvert.DeserializeObject<T>(json, SerializerSettings);
+    }
+
+    internal static string Serialize(object obj) {
+      return obj == null ? null : JsonConvert.SerializeObject(obj, SerializerSettings);
     }
 
   }
