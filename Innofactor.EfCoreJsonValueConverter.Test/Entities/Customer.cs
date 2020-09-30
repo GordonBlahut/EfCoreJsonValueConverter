@@ -1,5 +1,6 @@
 ﻿using Innofactor.EfCoreJsonValueConverter.Test.Components;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Innofactor.EfCoreJsonValueConverter.Test.Entities
 {
@@ -16,10 +17,18 @@ namespace Innofactor.EfCoreJsonValueConverter.Test.Entities
     [JsonField]
     [JsonConverter(typeof(ObscureAddressJsonConverter))]
     public Address ProtectedAddress { get; set; }
+
+    [JsonField]
+    public Office Office { get; set; }
+
+    [JsonField]
+    [NotMapped]
+    public Office OfficeNotMapped { get; set; }
   }
 
   public class CustomerWithPlainField
   {
-    private string name;
+    private string _name;
+    public string Name { get; set; }
   }
 }
